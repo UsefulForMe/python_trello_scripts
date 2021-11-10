@@ -12,6 +12,10 @@ google-auth-oauthlib = "*"
 requests = "*"
 pydash = "*"
 aiohttp = "*"
+python-dotenv = "*"
+datetime = "*"
+termcolor = "*"
+nest-asyncio = "*"
 
 [dev-packages]
 

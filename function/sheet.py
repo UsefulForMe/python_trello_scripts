@@ -1,6 +1,6 @@
 import config.sheet as Sheet
 import gspread as gs
-from model.user import User
+from modules.user.user_model import User
 
 service, gc = Sheet.init()
 
@@ -8,7 +8,6 @@ service, gc = Sheet.init()
 def create_spreadsheet(title: str) -> str:
     # title = f"Summary Point {date.today()}"
     spreadsheet = gc.create(title)
-    print(spreadsheet.url)
     return spreadsheet
 
 
@@ -18,12 +17,13 @@ def open_spreadsheet(name: str):
         sheet = gc.open(name)
     except gs.exceptions.SpreadsheetNotFound as e:
         sheet = create_spreadsheet(name)
+    print(sheet.url)
     return sheet
 
 
 def share_with(spreadsheet, users: list["User"]):
     for user in users:
-        spreadsheet.share(user.email, perm_type="user", role=user.role)
+        spreadsheet.share(user.email, perm_type="user", role=user.sheet_role)
 
 
 def open_worksheet(spreadsheet, name: str):

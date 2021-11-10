@@ -1,12 +1,19 @@
-import function.sheet as sheet
-import function.pandas as pd
+from dotenv import load_dotenv
 
-spreadsheet = sheet.open_spreadsheet("Hello world 1")
+load_dotenv()
+import asyncio
 
-df = pd.create_dataframe(
-    [["hello", "xin chao"], ["hula", "hola"]], columns=["Language", "Country"]
-)
+import pydash as _
 
-ws = sheet.open_worksheet(spreadsheet=spreadsheet, name="Languages")
-sheet.fill_data(ws, dataframe=df)
-sheet.delete_worksheet(spreadsheet=spreadsheet, name="Sheet1")
+from function.calc_points import select_label
+
+
+def __init__():
+    import config.database as db
+
+    db.init()
+    asyncio.run(select_label())
+
+
+if __name__ == "__main__":
+    __init__()
