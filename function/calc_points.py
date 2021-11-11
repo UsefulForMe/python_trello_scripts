@@ -5,6 +5,7 @@ import math
 
 import aiohttp
 import api.trello as trello
+from modules.card.card_model import Card
 import nest_asyncio
 import pydash as _
 from DateTime import DateTime
@@ -12,6 +13,7 @@ import re
 import function.pandas as pd
 import function.sheet as sheet
 import modules.user.user_service as user_service
+import modules.card.card_service as card_service
 
 nest_asyncio.apply()
 
@@ -69,23 +71,25 @@ def process_cards(cards):
             continue
         dueDate = dueDate = DateTime(card["due"]).Date() if card["due"] else ""
         useful_info = {
-            "name": card["name"],
             "id": card["id"],
-            "point": card["point"],
-            "list": dict["lists"][card["idList"]]["name"],
+            "name": card["name"],
+            "desc": card["desc"],
+            "id_board": card["idBoard"],
             "labels": ", ".join(
                 [dict["labels"][id_label]["name"] for id_label in card["idLabels"]]
             ),
-            "link": card["shortUrl"],
-            "dueDate": dueDate,
+            "short_url": card["shortUrl"],
+            "list": re.sub(r"[^a-zA-Z]+", "", name_list_of_card),
+            "point": card["point"],
+            "due_date": dueDate,
         }
         if not len(card["idMembers"]):
             summary_cards.append(useful_info)
         else:
             for member in card["idMembers"]:
                 clone_useful_info = copy.deepcopy(useful_info)
-                clone_useful_info["username"] = dict["members"][member]["fullName"]
-                clone_useful_info["userId"] = dict["members"][member]["id"]
+                clone_useful_info["full_name"] = dict["members"][member]["fullName"]
+                clone_useful_info["id_member"] = dict["members"][member]["id"]
                 clone_useful_info["point"] = math.ceil(
                     float(card["point"]) / len(card["idMembers"])
                 )
@@ -98,13 +102,13 @@ def fill_sheet(data, columns):
 
     for card in data:
         row = [
-            card.get("username", "Chưa có"),
+            card.get("full_name", "Chưa có"),
             card["name"],
             card["labels"],
             card["point"],
             card["list"],
-            card["link"],
-            card["dueDate"],
+            card["short_url"],
+            card["due_date"],
         ]
         worksheet_data.append(row)
     df = pd.create_dataframe(columns=columns, data=worksheet_data)
@@ -116,6 +120,13 @@ def fill_sheet(data, columns):
     sheet.fill_data(ws, dataframe=df)
     # sheet.share_with(sh, users=user_service.get_all_users())
     print("Done")
+
+    done_cards = _.map_(
+        _.filter_(data, lambda card: card["list"] == "Done"),
+        lambda card: Card.from_json(card),
+    )
+
+    card_service.insert_cards_in_week(done_cards)
 
 
 async def calc(id_label):

@@ -1,3 +1,6 @@
+import datetime as DateTime
+
+
 class Card:
     def __init__(
         self,
@@ -5,49 +8,49 @@ class Card:
         name,
         desc,
         id_board,
-        id_members,
+        id_member,
         labels=None,
         short_url=None,
-        id_list=None,
         point=None,
     ):
         self.id = id
         self.name = name
         self.desc = desc
         self.id_board = id_board
-        self.id_members = id_members
+        self.id_member = id_member
         self.labels = labels
         self.short_url = short_url
-        self.id_list = id_list
         self.point = point
+
+    @staticmethod
+    def from_tuple(tuple):
+        return Card(*tuple)
 
     @staticmethod
     def from_json(json):
         return Card(
-            id=json["id"],
-            name=json["name"],
-            desc=json["desc"],
-            id_board=json["idBoard"],
-            id_members=json["idMembers"],
-            labels=json["labels"],
-            short_url=json["shortUrl"],
-            id_list=json["idList"],
-            point=json["pos"],
+            json["id"],
+            json["name"],
+            json["desc"],
+            json["id_board"],
+            json["id_member"],
+            json["labels"],
+            json["short_url"],
+            json["point"],
         )
 
-    @staticmethod
-    def to_json(card):
-        return {
-            "id": card.id,
-            "name": card.name,
-            "desc": card.desc,
-            "idBoard": card.id_board,
-            "idMembers": card.id_members,
-            "labels": card.labels,
-            "shortUrl": card.short_url,
-            "idList": card.id_list,
-            "pos": card.point,
-        }
+    def to_tuple(self):
+        return (
+            self.id,
+            self.name,
+            self.desc,
+            self.id_board,
+            self.id_member,
+            self.labels,
+            self.short_url,
+            self.point,
+            int(DateTime.date.today().isocalendar()[1]),
+        )
 
 
 sql_create_card_table = """ CREATE TABLE IF NOT EXISTS cards (
@@ -55,10 +58,10 @@ sql_create_card_table = """ CREATE TABLE IF NOT EXISTS cards (
                                         name text NOT NULL,
                                         desc text,
                                         id_board text NOT NULL,
-                                        id_members text, 
+                                        id_member text, 
                                         labels text,
                                         short_url text,
-                                        id_list text,
                                         point real,
-                                        due_complete integer
+                                        week integer,
+                                        FOREIGN KEY(id_member) REFERENCES users(id)
                                     ); """
