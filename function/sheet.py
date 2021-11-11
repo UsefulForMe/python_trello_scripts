@@ -21,8 +21,9 @@ def open_spreadsheet(name: str):
     return sheet
 
 
-def share_with(spreadsheet, users: list["User"]):
+def share_with_many(spreadsheet, users: list["User"]):
     for user in users:
+        print(user.email)
         spreadsheet.share(user.email, perm_type="user", role=user.sheet_role)
 
 

@@ -118,8 +118,8 @@ def fill_sheet(data, columns):
     )
     ws = sheet.open_worksheet(sh, "Summary Point")
     sheet.fill_data(ws, dataframe=df)
-    # sheet.share_with(sh, users=user_service.get_all_users())
     print("Done")
+    sheet.share_with_many(sh, users=user_service.get_all_users())
 
     done_cards = _.map_(
         _.filter_(data, lambda card: card["list"] == "Done"),
