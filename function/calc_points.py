@@ -114,10 +114,11 @@ def fill_sheet(data, columns):
     df = pd.create_dataframe(columns=columns, data=worksheet_data)
     df["Point"] = df["Point"].astype(int)
     sh = sheet.open_spreadsheet(
-        name=f"Summary Point {datetime.today().strftime('%Y-%m-%d')}"
+        name=f"Summary Point {datetime.today().strftime('%Y-%m-%d')} {int(datetime.today().isocalendar()[1])}"
     )
     ws = sheet.open_worksheet(sh, "Summary Point")
     sheet.fill_data(ws, dataframe=df)
+
     print("Done")
     sheet.share_with_many(sh, users=user_service.get_all_users())
 
