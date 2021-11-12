@@ -12,7 +12,7 @@ else
     pipenv run python -m install --user --name==trello-scripts --display-name="Trello-scripts"
 fi
 source $(pipenv --venv)/bin/activate
-python main.py
 pipenv sync
+python main.py
 
 echo "Trello-scripts: Finished."
