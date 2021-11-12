@@ -8,7 +8,7 @@ if [[ "$package" == *"pipenv"* ]]; then
 else
     echo "Trello-scripts: Pipenv is not installed"
     echo "Trello-scripts: Installing Pipenv..."
-    sudo pip install pipenv
+    sudo pip3 install pipenv
 fi
 source $(pipenv --venv)/bin/activate
 pipenv sync
