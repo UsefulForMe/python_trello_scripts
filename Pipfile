@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-numpy = "*"
 pandas = "*"
 gspread = "*"
 google-api-python-client = "*"
@@ -16,6 +15,7 @@ python-dotenv = "*"
 datetime = "*"
 termcolor = "*"
 nest-asyncio = "*"
+numpy = "*"
 
 [dev-packages]
 

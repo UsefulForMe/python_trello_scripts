@@ -104,11 +104,11 @@
         },
         "async-timeout": {
             "hashes": [
-                "sha256:7d87a4e8adba8ededb52e579ce6bc8276985888913620c935094c2276fd83382",
-                "sha256:f3303dddf6cafa748a92747ab6c2ecf60e0aeca769aee4c151adfce243a05d9b"
+                "sha256:a22c0b311af23337eb05fcf05a8b51c3ea53729d46fb5460af62bee033cec690",
+                "sha256:b930cb161a39042f9222f6efb7301399c87eeab394727ec5437924a36d6eef51"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==4.0.0"
+            "version": "==4.0.1"
         },
         "attrs": {
             "hashes": [
@@ -550,11 +550,11 @@
         },
         "python-dotenv": {
             "hashes": [
-                "sha256:14f8185cc8d494662683e6914addcb7e95374771e707601dfc70166946b4c4b8",
-                "sha256:bbd3da593fc49c249397cbfbcc449cf36cb02e75afc8157fcc6a81df6fb7750a"
+                "sha256:32b2bdc1873fd3a3c346da1c6db83d0053c3c62f28f1f38516070c4c8971b1d3",
+                "sha256:a5de49a31e953b45ff2d2fd434bbc2670e8db5273606c1e737cc6b93eff3655f"
             ],
             "index": "pypi",
-            "version": "==0.19.1"
+            "version": "==0.19.2"
         },
         "pytz": {
             "hashes": [
@@ -586,6 +586,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==4.7.2"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:a481fbc56b33f5d8f6b33dce41482e64c68b668be44ff42922903b03872590bf",
+                "sha256:dae6b934a965c8a59d6d230d3867ec408bb95e73bd538ff77e71fedf1eaca729"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==58.5.3"
         },
         "six": {
             "hashes": [
