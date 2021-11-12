@@ -9,7 +9,7 @@ else
     echo "Trello-scripts: Pipenv is not installed"
     echo "Trello-scripts: Installing Pipenv..."
     sudo pip3 install pipenv
-    pipenv run python -m ipykernel install --user --name==trello-scripts --display-name="Trello-scripts"
+    pipenv run python -m install --user --name==trello-scripts --display-name="Trello-scripts"
 fi
 source $(pipenv --venv)/bin/activate
 python main.py
