@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "Trello-scripts: Starting..."
-package=$(pip list)
+package=$(pip3 list)
 
 if [[ "$package" == *"pipenv"* ]]; then
     echo "Trello-scripts: Pipenv is installed"
@@ -9,9 +9,9 @@ else
     echo "Trello-scripts: Pipenv is not installed"
     echo "Trello-scripts: Installing Pipenv..."
     sudo pip3 install pipenv
+    pipenv install
 fi
 source $(pipenv --venv)/bin/activate
-pipenv sync
 python main.py
 
 echo "Trello-scripts: Finished."
