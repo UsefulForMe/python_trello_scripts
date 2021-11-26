@@ -41,7 +41,7 @@ class Card:
 
     def to_tuple(self):
         return (
-            self.id,
+            self.id + "-" + self.id_member,
             self.name,
             self.desc,
             self.id_board,
