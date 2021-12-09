@@ -4,3 +4,5 @@ secret/*.json
 db.*
 
 __pycache__
+
+database.csv
