@@ -16,6 +16,9 @@ fi
 cd $dir
 source $(pipenv --venv)/bin/activate
 pipenv sync
+
+rm $dir/secret/sheet_token.json
+
 python $dir/main.py
 
 echo "Trello-scripts: Finished."
