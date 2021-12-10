@@ -86,12 +86,18 @@ def process_cards(cards):
         if not len(card["idMembers"]):
             summary_cards.append(useful_info)
         else:
-            for member in card["idMembers"]:
+            # get available members
+            available_members = _.filter_(
+                card["idMembers"], lambda member: member in dict["members"]
+            )
+
+            for member in available_members:
                 clone_useful_info = copy.deepcopy(useful_info)
+                clone_useful_info["username"] = dict["members"][member]["fullName"]
                 clone_useful_info["full_name"] = dict["members"][member]["fullName"]
                 clone_useful_info["id_member"] = dict["members"][member]["id"]
                 clone_useful_info["point"] = math.ceil(
-                    float(card["point"]) / len(card["idMembers"])
+                    float(card["point"]) / len(available_members)
                 )
                 summary_cards.append(clone_useful_info)
     return summary_cards
