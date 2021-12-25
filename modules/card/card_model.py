@@ -33,10 +33,10 @@ class Card:
             json["name"],
             json["desc"],
             json["id_board"],
-            json["id_member"],
+            json["id_member"] if "id_member" in json else "",
             json["labels"],
             json["short_url"],
-            json["point"],
+            json["point"] if "point" in json else 0,
         )
 
     def to_tuple(self):
