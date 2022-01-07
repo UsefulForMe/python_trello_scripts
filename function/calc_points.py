@@ -126,14 +126,14 @@ def fill_sheet(data, columns):
     sheet.fill_data(ws, dataframe=df)
 
     print("Done")
-    sheet.share_with_many(sh, users=user_service.get_all_users())
-
     done_cards = _.map_(
         _.filter_(data, lambda card: card["list"] == "Done"),
         lambda card: Card.from_json(card),
     )
 
     card_service.insert_cards_in_week(done_cards)
+
+    sheet.share_with_many(sh, users=user_service.get_all_users())
 
 
 async def calc(id_label):

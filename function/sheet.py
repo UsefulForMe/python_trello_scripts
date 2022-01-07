@@ -25,7 +25,9 @@ def share_with_many(spreadsheet, users: list["User"]):
     for user in users:
         print(user.email)
         spreadsheet.share(
-            user.email, perm_type="user", role=user.sheet_role, notify=False
+            user.email,
+            perm_type="user",
+            role=user.sheet_role,
         )
 
 
