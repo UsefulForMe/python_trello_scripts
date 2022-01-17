@@ -20,6 +20,7 @@ import function.sheet as sheet
 nest_asyncio.apply()
 
 boards = trello.get_boards()
+
 board_name= os.environ.get("TRELLO_BOARD_NAME")
 board = _.find(boards, {"name": board_name})
 board_id = board.get("id")
@@ -59,19 +60,21 @@ async def get_point(card, session):
     return card
 
 
-def process_cards(cards):
+
+
+def process_cards_bs(cards):
     summary_cards = []
-    cards_with_point = asyncio.run(get_points(cards))
-    for card in cards_with_point:
+    
+    for card in cards:
         name_list_of_card = dict["lists"][card.get("idList")].get("name")
         if re.sub(r"[^a-zA-Z]+", "", name_list_of_card) not in [
+            "Backlog",
             "Todo",
             "Doing",
-            "Edit",
-            "QC",
             "Done",
         ]:
             continue
+
         dueDate = dueDate = DateTime(card["due"]).Date() if card["due"] else ""
         useful_info = {
             "id": card["id"],
@@ -83,7 +86,6 @@ def process_cards(cards):
             ),
             "short_url": card["shortUrl"],
             "list": re.sub(r"[^a-zA-Z]+", "", name_list_of_card),
-            "point": card["point"],
             "due_date": dueDate,
         }
         if not len(card["idMembers"]):
@@ -99,14 +101,13 @@ def process_cards(cards):
                 clone_useful_info["username"] = dict["members"][member]["fullName"]
                 clone_useful_info["full_name"] = dict["members"][member]["fullName"]
                 clone_useful_info["id_member"] = dict["members"][member]["id"]
-                clone_useful_info["point"] = math.ceil(
-                    float(card["point"]) / len(available_members)
-                )
                 summary_cards.append(clone_useful_info)
     return summary_cards
 
 
-def fill_sheet(data, columns):
+
+
+def fill_sheet_bs(data, columns):
     worksheet_data = []
 
     for card in data:
@@ -114,29 +115,19 @@ def fill_sheet(data, columns):
             card.get("full_name", "Chưa có"),
             card["name"],
             card["labels"],
-            card["point"],
             card["list"],
             card["short_url"],
             card["due_date"],
         ]
         worksheet_data.append(row)
     df = pd.create_dataframe(columns=columns, data=worksheet_data)
-    df["Point"] = df["Point"].astype(int)
     sh = sheet.open_spreadsheet(
-        name=f"Summary Point {datetime.today().strftime('%Y-%m-%d')} {int(datetime.today().isocalendar()[1])}"
+        name=f"Summary Card {datetime.today().strftime('%Y-%m-%d')} {int(datetime.today().isocalendar()[1])}"
     )
-    ws = sheet.open_worksheet(sh, "Summary Point")
+    ws = sheet.open_worksheet(sh, "Summary Card")
     sheet.fill_data(ws, dataframe=df)
 
     print("Done")
-    done_cards = _.map_(
-        _.filter_(data, lambda card: card["list"] == "Done"),
-        lambda card: Card.from_json(card),
-    )
-
-    card_service.insert_cards_in_week(done_cards)
-
-    sheet.share_with_many(sh, users=user_service.get_all_users())
 
 
 async def calc(id_label):
@@ -157,34 +148,24 @@ async def calc(id_label):
         make_dict(_data, index)
 
     cards = data[4]
+    if(id_label):
+        cards = _.filter_(cards, lambda card: id_label in card["idLabels"])
 
-    cards_in_label = _.filter_(cards, lambda card: id_label in card.get("idLabels"))
-    processed_cards = process_cards(cards_in_label)
+    processed_cards = process_cards_bs(cards)
     return processed_cards
 
 
-async def select_label():
+
+async def summarize_card():
     async with aiohttp.ClientSession() as session:
-        labels = await trello.get_labels(board_id=board_id, session=session)
-        labels.sort(key=sort_label)
-
-        for index, label in enumerate(labels):
-            print(f"{index}. {label.get('name')}")
-
-        print("Chọn index label cần tính toán: ")
-        index = int(input())
-        if index < 0 or index > len(labels) - 1:
-            raise "Vui lòng chọn index hợp lệ"
-        choose_label = labels[index]
-        cards = await calc(choose_label.get("id"))
+        cards = await calc(None)
         fields = [
             "Username",
             "Card Title",
             "Label",
-            "Point",
             "Status",
             "Link",
             "Due Date",
         ]
 
-        fill_sheet(cards, fields)
+        fill_sheet_bs(cards, fields)
