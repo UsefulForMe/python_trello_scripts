@@ -11,16 +11,18 @@ conn = sqlite3.connect(
 )
 
 query_user = "1==1" if sys.argv[1] == "all" else f"users.email like '%{sys.argv[1]}%'"
-first_week_of_last_month = int(sys.argv[2])
-last_week_of_last_month = int(sys.argv[3])
+
+if len(sys.argv) > 2:
+    first_week_of_last_month = int(sys.argv[2])
+    last_week_of_last_month = int(sys.argv[3])
+    query_user+= f"AND cards.week BETWEEN {first_week_of_last_month} AND {last_week_of_last_month}"
 
 
 db_df = pd.read_sql_query(
     f"""
     SELECT users.name as username,cards.name,labels,short_url,point,week FROM cards JOIN users ON cards.id_member = users.id 
     WHERE 
-        {query_user} AND
-        cards.week BETWEEN {first_week_of_last_month} AND {last_week_of_last_month}
+        {query_user}
     """,
     conn,
 )
