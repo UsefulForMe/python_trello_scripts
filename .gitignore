@@ -6,3 +6,4 @@ db.*
 __pycache__
 
 database.csv
+node_modules
