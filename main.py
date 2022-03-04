@@ -1,4 +1,4 @@
-from black import os
+from os import environ
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,7 +14,7 @@ def __init__():
     import config.database as db
 
     db.init()
-    board_name = os.environ.get("TRELLO_BOARD_NAME")
+    board_name = environ.get("TRELLO_BOARD_NAME")
     print(board_name)
 
     if board_name=='Business Solution':

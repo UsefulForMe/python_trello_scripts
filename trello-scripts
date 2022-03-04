@@ -2,6 +2,34 @@
 
 echo "Trello-scripts: Starting..."
 
+
+python_path=$(which python3)
+
+os_name=$(uname)
+
+
+if [ -z "$python_path" ]; then
+    echo "Trello-scripts: Python3 not found. Please install it."
+    if [ "$os_name" = "Linux" ]; then
+        sudo apt-get install python3
+    elif [ "$os_name" = "Darwin" ]; then
+        brew install python3
+    fi
+fi
+
+
+pip=$(which pip)
+if [ -z "$pip" ]; then
+    echo "Trello-scripts: pip not found. Installing..."
+    if [ "$os_name" = "Linux" ]; then
+        sudo apt-get install python3-pip
+    elif [ "$os_name" = "Darwin" ]; then
+        brew install python3-pip
+    fi
+fi
+
+
+
 dir=$(dirname $0)
 package=$(pip list)
 
@@ -10,7 +38,7 @@ if [[ "$package" == *"pipenv"* ]]; then
 else
     echo "Trello-scripts: Pipenv is not installed"
     echo "Trello-scripts: Installing Pipenv..."
-    pip install pipenv
+    sudo -H pip install -U pipenv
 
 fi
 cd $dir
@@ -19,6 +47,6 @@ pipenv sync
 
 rm $dir/secret/sheet_token.json
 
-python $dir/main.py
+python3 $dir/main.py
 
 echo "Trello-scripts: Finished."

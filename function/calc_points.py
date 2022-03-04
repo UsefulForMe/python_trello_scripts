@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import math
+import os
 import re
 from datetime import datetime
 
@@ -12,7 +13,6 @@ import nest_asyncio
 import pydash as _
 from DateTime import DateTime
 from modules.card.card_model import Card
-from platformdirs import os
 
 import function.pandas as pd
 import function.sheet as sheet
